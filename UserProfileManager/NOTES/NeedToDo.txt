@@ -1,0 +1,13 @@
+add prefix to the UUID
+
+password mush be hashed
+
+Validation as for one user have only one tenth, twelfth,bachelors, masters
+
+look at the naming of views
+
+with out login user cannot navigate to any other place
+
+Error handiling in front end and backend
+
+upload the Image

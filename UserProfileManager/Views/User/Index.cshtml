@@ -1,0 +1,42 @@
+﻿@model IEnumerable<UserProfileManager.Models.User>
+
+@{
+  ViewData["Title"] = "Users";
+}
+
+<h1>Users</h1>
+
+<p>
+  <a href="@Url.Action("Create")" class="btn btn-primary">Create New</a>
+</p>
+
+<div class="container">
+  <div class="row">
+    @foreach (var user in Model)
+    {
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            @if (user.Photo != null && user.Photo.Length > 0)
+            {
+              <img src="data:image/jpeg;base64,@Convert.ToBase64String(user.Photo)" alt="User Photo" class="img-thumbnail" style="max-width: 100px;" />
+            }
+            else
+            {
+              <img src="~/images/download.png" alt="Placeholder Image" class="img-thumbnail" style="max-width: 100px;" />
+            }
+            <h5 class="card-title">@user.UniqueName</h5>
+            <h6 class="card-subtitle mb-2 text-muted">@user.FirstName @user.LastName</h6>
+            <p class="card-text">
+              <strong>Email:</strong> @user.Email<br />
+              <strong>Phone Number:</strong> @user.PhoneNumber
+            </p>
+            <a href="@Url.Action("Details", new { id = user.Id })" class="btn btn-info">Details</a>
+            <a href="@Url.Action("Edit", new { id = user.Id })" class="btn btn-warning">Edit</a>
+            <a href="@Url.Action("Delete", new { id = user.Id })" class="btn btn-danger">Delete</a>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</div>

@@ -1,0 +1,112 @@
+﻿@using Microsoft.Extensions.Caching.Memory
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>@ViewData["Title"] - UserProfileManager</title>
+  <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+  <link rel="stylesheet" href="~/UserProfileManager.styles.css" asp-append-version="true" />
+  <style>
+    /* Popup Styles */
+    .error-popup {
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -20%);
+      padding: 20px;
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      border-radius: 5px;
+      display: none;
+      z-index: 1050;
+    }
+
+      .error-popup button {
+        background: #721c24;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+      <div class="container-fluid">
+        <a class="navbar-brand" asp-area="" asp-controller="User" asp-action="Login">UserProfileManager</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+          <ul class="navbar-nav flex-grow-1">
+            <!-- Removed Login, Home, Privacy links -->
+          </ul>
+          <ul class="navbar-nav align-items-center">
+            @if (Context?.RequestServices?.GetService<IMemoryCache>()?.TryGetValue("LoggedInUserFullName", out string? fullName) == true && !string.IsNullOrEmpty(fullName))
+            {
+              <li class="nav-item">
+                <span class="navbar-text">Welcome, @fullName?.ToUpper()</span>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Logout">Logout</a>
+              </li>
+            }
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <div class="container">
+    <main role="main" class="pb-3">
+      @RenderBody()
+    </main>
+  </div>
+
+  <footer class="border-top footer text-muted">
+    <div class="container">
+      &copy; 2024 - UserProfileManager - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+    </div>
+  </footer>
+
+  <!-- Error Popup -->
+  <div class="error-popup" id="errorPopup">
+    <p id="errorMessage"></p>
+    <button onclick="closeErrorPopup()">OK</button>
+  </div>
+
+  <script src="~/lib/jquery/dist/jquery.min.js"></script>
+  <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="~/js/site.js" asp-append-version="true"></script>
+  @await RenderSectionAsync("Scripts", required: false)
+
+  <script>
+    function showErrorPopup(message) {
+      $('#errorMessage').text(message);
+      $('#errorPopup').show();
+    }
+
+    function closeErrorPopup() {
+      $('#errorPopup').hide();
+    }
+
+    $(document).ready(function () {
+      // Example of how you might catch and display errors globally
+      $(document).ajaxError(function (event, jqxhr, settings, thrownError) {
+        showErrorPopup('An error occurred: ' + thrownError);
+      });
+
+      // Check if there are any errors passed from the backend (if applicable)
+      var errorMessage = '@ViewData["ErrorMessage"]';
+      if (errorMessage) {
+        showErrorPopup(errorMessage);
+      }
+    });
+
+  </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>@ViewData["Title"] - UserProfileManager</title>
+  <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+  <link rel="stylesheet" href="~/UserProfileManager.styles.css" asp-append-version="true" />
+  <style>
+    body {
+      background-color: #1a1a2e; /* Dark navy background */
+      color: #ffffff; /* White text */
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: #e3e3e3; /* Light gray content area */
+      color: #333333; /* Dark text for content */
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      width: 100%;
+      max-width: 600px; /* Maximum width for the container */
+    }
+
+    .error-popup {
+      position: fixed;
+      top: 20%;
+      left: 50%;
+      transform: translate(-50%, -20%);
+      padding: 20px;
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+      border-radius: 5px;
+      display: none;
+      z-index: 1050;
+    }
+
+      .error-popup button {
+        background: #721c24;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        cursor: pointer;
+      }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <main role="main" class="pb-3">
+      @RenderBody()
+    </main>
+  </div>
+
+  <!-- Error Popup -->
+  <div class="error-popup" id="errorPopup">
+    <p id="errorMessage"></p>
+    <button onclick="closeErrorPopup()">OK</button>
+  </div>
+
+  <script src="~/lib/jquery/dist/jquery.min.js"></script>
+  <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="~/js/site.js" asp-append-version="true"></script>
+  @await RenderSectionAsync("Scripts", required: false)
+
+  <script>
+    function showErrorPopup(message) {
+      $('#errorMessage').text(message);
+      $('#errorPopup').show();
+    }
+
+    function closeErrorPopup() {
+      $('#errorPopup').hide();
+    }
+
+    $(document).ready(function () {
+      // Example of how you might catch and display errors globally
+      $(document).ajaxError(function (event, jqxhr, settings, thrownError) {
+        showErrorPopup('An error occurred: ' + thrownError);
+      });
+
+      // Check if there are any errors passed from the backend (if applicable)
+      var errorMessage = '@ViewData["ErrorMessage"]';
+      if (errorMessage) {
+        showErrorPopup(errorMessage);
+      }
+    });
+  </script>
+</body>
+</html>
