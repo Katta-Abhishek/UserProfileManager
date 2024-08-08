@@ -39,9 +39,9 @@ public class AuthController : Controller
         if (result.Id != 0)
         {
           List<Claim> claims = new()
-                        {
-                            new Claim(ClaimTypes.Name, model.UniqueName)
-                        };
+                {
+                    new Claim(ClaimTypes.Name, model.UniqueName)
+                };
 
           ClaimsIdentity identity = new(claims, CookieAuthenticationDefaults.AuthenticationScheme);
           ClaimsPrincipal principal = new(identity);
@@ -53,21 +53,19 @@ public class AuthController : Controller
 
           return RedirectToAction("Index", "User");
         }
+
         ModelState.AddModelError(string.Empty, "Invalid login attempt.");
       }
+
       return View(model);
     }
     catch (Exception ex)
     {
-      var errorDetails = new ErrorViewModel
-      {
-        ErrorMessage = ex.Message,
-        RequestId = HttpContext.TraceIdentifier
-      };
-
-      return View("ErrorPopup", errorDetails);
+      ModelState.AddModelError(string.Empty, ex.Message);
+      return View(model);
     }
   }
+
 
   [HttpGet("Logout")]
   public async Task<IActionResult> Logout()
