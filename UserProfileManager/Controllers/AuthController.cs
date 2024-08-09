@@ -50,6 +50,7 @@ public class AuthController : Controller
 
           string fullName = $"{result.FirstName} {result.MiddleName} {result.LastName}";
           _memoryCache.Set("LoggedInUserFullName", fullName);
+          _memoryCache.Set("UniqueName", result.UniqueName);
 
           return RedirectToAction("Index", "User");
         }

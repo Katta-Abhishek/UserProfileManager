@@ -28,9 +28,20 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
       options.AccessDeniedPath = "/User/AccessDenied";
     });
 
+string? sqlServerConnectionString = builder.Configuration.GetConnectionString("SqlServerDefaultConnection");
+string? sqliteConnectionString = builder.Configuration.GetConnectionString("SqliteDefaultConnection");
 
-builder.Services.AddDbContext<ApplicationDbContext>(dbContextOptions =>
-  dbContextOptions.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+if (sqlServerConnectionString != null)
+{
+  builder.Services.AddDbContext<ApplicationDbContext>(dbContextOptions =>
+  dbContextOptions.UseSqlServer(sqlServerConnectionString));
+}
+else
+{
+  builder.Services.AddDbContext<ApplicationDbContext>(dbContextOptions =>
+dbContextOptions.UseSqlite(sqliteConnectionString));
+}
+
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 

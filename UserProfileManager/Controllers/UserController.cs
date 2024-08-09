@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using UserProfileManager.Business.Interfaces;
 using UserProfileManager.Models;
 
@@ -9,9 +10,11 @@ namespace UserProfileManager.Controllers;
 public class UserController : Controller
 {
   private readonly IUserBusiness _userBusiness;
-  public UserController(IUserBusiness userBusiness)
+  private readonly IMemoryCache _memoryCache;
+  public UserController(IUserBusiness userBusiness, IMemoryCache memoryCache)
   {
     _userBusiness = userBusiness;
+    _memoryCache = memoryCache;
   }
 
   [Route("User/AccessDenied")]
@@ -47,6 +50,11 @@ public class UserController : Controller
   public async Task<IActionResult> Index()
   {
     var users = await _userBusiness.GetAllAsync();
+
+    string cachedUniqueName = _memoryCache.Get<string>("UniqueName") ?? string.Empty;
+
+    ViewBag.CachedUniqueName = cachedUniqueName;
+
     return View(users);
   }
 
