@@ -70,7 +70,7 @@ public class UserController : Controller
 
   [HttpPost("Create")]
   [ValidateAntiForgeryToken]
-  public async Task<IActionResult> Create([Bind("UniqueName,Password,FirstName,PhoneNumber,Gender,Email,DateOfBirth,MiddleName,LastName,Address,City,CountryCode")] User user, IFormFile? photo)
+  public async Task<IActionResult> Create([Bind("UniqueName,Password,FirstName,PhoneNumber,Gender,Email,DateOfBirth,MiddleName,LastName,Address,City,CountryCode")] User user, string[] Education, IFormFile? photo)
   {
     try
     {
@@ -105,8 +105,8 @@ public class UserController : Controller
       {
         user.Photo = null;
       }
+      user.Education = string.Join(", ", Education);
 
-      // EF Core will handle the Id generation
       await _userBusiness.AddAsync(user);
 
       return RedirectToAction(nameof(Index));
@@ -135,7 +135,7 @@ public class UserController : Controller
   [HttpPost("Edit/{id}")]
   [ValidateAntiForgeryToken]
   [Authorize]
-  public async Task<IActionResult> Edit(int id, [Bind("Id,UUID,UniqueName,Password,FirstName,CountryCode,PhoneNumber,Gender,Email,DateOfBirth,CreatedOn,UpdatedOn,MiddleName,LastName,Address,City,Education")] User user, IFormFile? photo)
+  public async Task<IActionResult> Edit(int id, [Bind("Id,UUID,UniqueName,Password,FirstName,CountryCode,PhoneNumber,Gender,Email,DateOfBirth,CreatedOn,UpdatedOn,MiddleName,LastName,Address,City,Education")] User user, string[] Education, IFormFile? photo)
   {
     try
     {
@@ -164,9 +164,9 @@ public class UserController : Controller
           }
         }
 
-        user.UpdatedOn = DateTime.UtcNow;
+        user.Education = string.Join(", ", Education);
 
-        Console.WriteLine($"CountryCode: {user.CountryCode}");
+        user.UpdatedOn = DateTime.UtcNow;
 
         await _userBusiness.UpdateAsync(user);
         return RedirectToAction(nameof(Index));

@@ -5,6 +5,9 @@
   ViewData["Title"] = "Edit";
   var emailValidationRegex = StringConstants.EmailValidation;
   var encodedEmailValidationRegex = System.Text.Encodings.Web.JavaScriptEncoder.Default.Encode(emailValidationRegex);
+
+  // Split the Education string into an array
+  var selectedEducation = Model.Education?.Split(',').Select(e => e.Trim()).ToArray() ?? new string[] { };
 }
 
 <h1>Edit</h1>
@@ -56,7 +59,6 @@
             </div>
           </div>
         </div>
-
 
         <!-- Address -->
         <div class="form-group">
@@ -112,30 +114,35 @@
           <span id="uniqueNameSuccess" class="text-success" style="display: none;"></span>
         </div>
 
-        <div class="form-group">
-          <label asp-for="Password" class="control-label"></label>
-          <input asp-for="Password" type="password" class="form-control" />
-          <span asp-validation-for="Password" class="text-danger"></span>
-        </div>
-
-        <div class="form-group">
-          <label for="confirmPassword" class="control-label">Confirm Password</label>
-          <input id="confirmPassword" name="ConfirmPassword" type="password" class="form-control" />
-          <span id="passwordError" class="text-danger" style="display: none;">Passwords do not match.</span>
-        </div>
-
+        <!-- Education -->
         <div class="form-group">
           <label>Education:</label><br />
-          <input type="checkbox" id="10th" name="Education" value="10th" />
+          <input type="checkbox" id="10th" name="Education" value="10th" @(selectedEducation.Contains("10th") ? "checked" : "") />
           <label for="10th">10th</label><br />
-          <input type="checkbox" id="12th" name="Education" value="12th" />
+          <input type="checkbox" id="12th" name="Education" value="12th" @(selectedEducation.Contains("12th") ? "checked" : "") />
           <label for="12th">12th</label><br />
-          <input type="checkbox" id="bachelors" name="Education" value="Bachelors" />
+          <input type="checkbox" id="bachelors" name="Education" value="Bachelors" @(selectedEducation.Contains("Bachelors") ? "checked" : "") />
           <label for="bachelors">Bachelors</label><br />
-          <input type="checkbox" id="masters" name="Education" value="Masters" />
-          <label for="masters">Masters</label>
+          <input type="checkbox" id="masters" name="Education" value="Masters" @(selectedEducation.Contains("Masters") ? "checked" : "") />
+          <label for="masters">Masters</label><br />
           <span asp-validation-for="Education" class="text-danger"></span>
         </div>
+
+        @* Conditionally render password fields if needed *@
+        @if (!string.IsNullOrEmpty(Model?.Password))
+        {
+          <div class="form-group">
+            <label asp-for="Password" class="control-label"></label>
+            <input asp-for="Password" type="password" class="form-control" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+          </div>
+
+          <div class="form-group">
+            <label for="confirmPassword" class="control-label">Confirm Password</label>
+            <input id="confirmPassword" name="ConfirmPassword" type="password" class="form-control" />
+            <span id="passwordError" class="text-danger" style="display: none;">Passwords do not match.</span>
+          </div>
+        }
       </div> <!-- Closing column 2 -->
     </div> <!-- Closing row -->
 
@@ -160,12 +167,12 @@
     // Confirm Password Validation
     document.addEventListener('DOMContentLoaded', function () {
       // Confirm Password Validation
-      document.getElementById('confirmPassword').addEventListener('input', function () {
-        var password = document.getElementById('Password').value;
+      document.getElementById('confirmPassword')?.addEventListener('input', function () {
+        var password = document.getElementById('Password')?.value;
         var confirmPassword = this.value;
         var errorSpan = document.getElementById('passwordError');
 
-        if (password !== confirmPassword) {
+        if (password && password !== confirmPassword) {
           errorSpan.style.display = 'inline';
         } else {
           errorSpan.style.display = 'none';
@@ -173,7 +180,7 @@
       });
 
       // Email Validation
-      document.getElementById('Email').addEventListener('input', function () {
+      document.getElementById('Email')?.addEventListener('input', function () {
         var email = this.value;
         var errorSpan = document.getElementById('emailError');
         var emailRegex = new RegExp("@encodedEmailValidationRegex");
@@ -186,7 +193,7 @@
       });
 
       // Unique Name Validation with Button
-      document.getElementById('checkUniqueNameButton').addEventListener('click', function () {
+      document.getElementById('checkUniqueNameButton')?.addEventListener('click', function () {
         var uniqueName = document.getElementById('UniqueName').value;
         var errorSpan = document.getElementById('uniqueNameError');
         var successSpan = document.getElementById('uniqueNameSuccess');
@@ -222,12 +229,10 @@
       });
     });
 
-
     ClassicEditor
       .create(document.querySelector('#addressEditor'))
       .catch(error => {
         console.error(error);
       });
-
   </script>
 }

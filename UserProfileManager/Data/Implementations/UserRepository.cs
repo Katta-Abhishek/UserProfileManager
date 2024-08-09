@@ -121,9 +121,6 @@ namespace UserProfileManager.Data.Repositories
           throw new InvalidOperationException("A user with this email already exists.");
         }
 
-        // Encode the password to base64 before updating
-        user.Password = EncodeToBase64(user.Password);
-
         _context.Users.Update(user);
         await _context.SaveChangesAsync();
       }
