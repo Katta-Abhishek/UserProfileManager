@@ -122,6 +122,7 @@ namespace UserProfileManager.Data.Repositories
         }
 
         _context.Users.Update(user);
+        user.Password = EncodeToBase64(user.Password);
         await _context.SaveChangesAsync();
       }
       catch (Exception ex)

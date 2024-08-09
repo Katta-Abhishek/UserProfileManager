@@ -229,7 +229,7 @@ public class UserController : Controller
       }
 
       await _userBusiness.DeleteAsync(id);
-      return RedirectToAction(nameof(Index));
+      return Redirect("/Auth/Logout");
     }
     catch (Exception ex)
     {

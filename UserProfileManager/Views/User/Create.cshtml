@@ -21,8 +21,10 @@
 
         <!-- FirstName -->
         <div class="form-group">
-          <label asp-for="FirstName" class="control-label"></label>
-          <input asp-for="FirstName" class="form-control" />
+          <label asp-for="FirstName" class="control-label">
+            First Name <span class="text-danger">*</span>
+          </label>
+          <input asp-for="FirstName" class="form-control" required />
           <span asp-validation-for="FirstName" class="text-danger"></span>
         </div>
 
@@ -42,19 +44,23 @@
 
         <!-- Phone Number Section -->
         <div class="form-group">
-          <label>Phone Number:</label>
+          <label>Phone Number <span class="text-danger">*</span>:</label>
           <div class="row">
             <!-- CountryCode input -->
             <div class="col-md-6">
-              <label asp-for="CountryCode" class="control-label"></label>
-              <input asp-for="CountryCode" class="form-control" />
+              <label asp-for="CountryCode" class="control-label">
+                Country Code <span class="text-danger">*</span>
+              </label>
+              <input asp-for="CountryCode" class="form-control" required />
               <span asp-validation-for="CountryCode" class="text-danger"></span>
             </div>
 
             <!-- PhoneNumber input -->
             <div class="col-md-6">
-              <label asp-for="PhoneNumber" class="control-label"></label>
-              <input asp-for="PhoneNumber" class="form-control" />
+              <label asp-for="PhoneNumber" class="control-label">
+                Phone Number <span class="text-danger">*</span>
+              </label>
+              <input asp-for="PhoneNumber" class="form-control" required />
               <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
           </div>
@@ -69,8 +75,8 @@
 
         <!-- Gender -->
         <div class="form-group">
-          <label>Gender:</label><br />
-          <input type="radio" id="male" name="Gender" value="M" />
+          <label>Gender <span class="text-danger">*</span>:</label><br />
+          <input type="radio" id="male" name="Gender" value="M" required />
           <label for="male">Male</label><br />
           <input type="radio" id="female" name="Gender" value="F" />
           <label for="female">Female</label><br />
@@ -79,22 +85,25 @@
           <span asp-validation-for="Gender" class="text-danger"></span>
         </div>
 
-
       </div> <!-- Closing column 1 -->
       <!-- Column 2 -->
       <div class="col-md-6">
 
         <!-- DateOfBirth -->
         <div class="form-group">
-          <label asp-for="DateOfBirth" class="control-label"></label>
-          <input asp-for="DateOfBirth" type="datetime-local" class="form-control" />
+          <label asp-for="DateOfBirth" class="control-label">
+            Date of Birth <span class="text-danger">*</span>
+          </label>
+          <input asp-for="DateOfBirth" type="datetime-local" class="form-control" required />
           <span asp-validation-for="DateOfBirth" class="text-danger"></span>
         </div>
 
         <!-- Email -->
         <div class="form-group">
-          <label asp-for="Email" class="control-label"></label>
-          <input type="email" asp-for="Email" class="form-control" title="Please enter a valid email address." />
+          <label asp-for="Email" class="control-label">
+            Email <span class="text-danger">*</span>
+          </label>
+          <input type="email" asp-for="Email" class="form-control" title="Please enter a valid email address." required />
           <span asp-validation-for="Email" class="text-danger"></span>
         </div>
 
@@ -129,7 +138,7 @@
 
         <!-- UniqueName -->
         <div class="form-group">
-          <label asp-for="UniqueName" class="control-label"></label>
+          <label asp-for="UniqueName" class="control-label">Unique Name <span class="text-danger">*</span></label>
           <input asp-for="UniqueName" class="form-control" />
           <button type="button" id="checkUniqueNameButton" class="btn btn-secondary">Check Unique Name</button>
           <span asp-validation-for="UniqueName" class="text-danger"></span>
@@ -137,17 +146,16 @@
           <span id="uniqueNameSuccess" class="text-success" style="display: none;"></span>
         </div>
 
-
         <!-- Password -->
         <div class="form-group">
-          <label asp-for="Password" class="control-label"></label>
+          <label asp-for="Password" class="control-label">Password <span class="text-danger">*</span></label>
           <input asp-for="Password" type="password" class="form-control" />
           <span asp-validation-for="Password" class="text-danger"></span>
         </div>
 
         <!-- Confirm Password -->
         <div class="form-group">
-          <label for="confirmPassword" class="control-label">Confirm Password</label>
+          <label for="confirmPassword" class="control-label">Confirm Password <span class="text-danger">*</span></label>
           <input id="confirmPassword" name="ConfirmPassword" type="password" class="form-control" />
           <span id="passwordError" class="text-danger" style="display: none;">Passwords do not match.</span>
         </div>
@@ -170,7 +178,6 @@
     await Html.RenderPartialAsync("_ValidationScriptsPartial");
   }
 
-
   <script src="https://cdn.ckeditor.com/ckeditor5/ckeditor.js"></script>
   <script>
     // Confirm Password Validation
@@ -185,7 +192,6 @@
         errorSpan.style.display = 'none';
       }
     });
-
 
     // Unique Name Validation
     document.getElementById('checkUniqueNameButton').addEventListener('click', function () {
